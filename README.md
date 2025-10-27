@@ -38,6 +38,7 @@ git clone https://github.com/Ramzy842/Pamflet-backend.git
 git clone https://github.com/Ramzy842/Pamflet-frontend.git
 
 Your folder structure should look like this:
+```bash
 pamflet-root/
 ├── Pamflet-backend/
 ├── Pamflet-frontend/
@@ -47,7 +48,7 @@ pamflet-root/
 ├── .gitignore
 ├── README.md
 └── .env
-
+```
 
 # 4. Build and Start the Application
 
