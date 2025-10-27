@@ -1,0 +1,62 @@
+services:
+  backend:
+    build:
+      context: .  # Changed from ./backend to root
+      dockerfile: ./backend/Dockerfile
+    command: ["sh", "./wait-for-postgres.sh"]
+    ports:
+      - "4040:4040"
+      - "5555:5555"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - app
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - /frontend:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    environment:
+      - WATCHPACK_POLLING=true
+    networks:
+      - app
+    depends_on:
+      - backend
+
+  postgres_db:
+    image: postgres:15
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pamflet_admin} -d ${POSTGRES_DB:-pamflet_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  pgdata:
+
+networks:
+  app:
+    driver: bridge

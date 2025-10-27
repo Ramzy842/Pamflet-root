@@ -1,0 +1,27 @@
+# docker-compose.prod.yml
+services:
+  backend:
+    command: ["node", "dist/index.js"] # run compiled code only
+    volumes: [] # disable code sync
+    environment:
+      - NODE_ENV=production
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
+    command: ["serve", "-s", "build"]
+    volumes: []
+    ports:
+      - "80:3000" # expose on port 80 for HTTP
+    environment:
+      - NODE_ENV=production
+
+  postgres_db:
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=myapp_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=supersecret
