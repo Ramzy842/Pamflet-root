@@ -34,8 +34,10 @@ Then open the .env file and set your environment variables as needed.
 
 Clone the backend and frontend repositories inside the pamflet-root directory.
 
+```bash
 git clone https://github.com/Ramzy842/Pamflet-backend.git
 git clone https://github.com/Ramzy842/Pamflet-frontend.git
+```
 
 Your folder structure should look like this:
 ```bash
